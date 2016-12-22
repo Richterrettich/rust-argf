@@ -1,0 +1,9 @@
+[package]
+name = "argf"
+version = "0.1.0"
+authors = ["Rene Richter <Richterrettich@gmail.com>"]
+license = "Apache-2.0"
+description = "A rust implementation of ruby's ARGF"
+repository = "https://github.com/Richterrettich/rust-argf"
+
+[dependencies]
