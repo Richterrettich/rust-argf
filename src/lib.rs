@@ -3,20 +3,21 @@ use std::io::Read;
 use std::iter::Iterator;
 
 pub fn from_arguments() -> Box<io::Read> {
-    return from_iterator(std::env::args().skip(1));
+
+    return from_slice(&std::env::args().collect::<Vec<String>>());
 }
 
-pub fn from_iterator<I>(iter: I) -> Box<io::Read>
-    where I: Iterator<Item = String>
+pub fn from_slice<I>(input: &[I]) -> Box<io::Read>
+    where I: AsRef<str>
 {
     let mut chain: Box<Read> = Box::new(std::io::empty().chain(std::io::empty()));
-    for reader in iter.map(|p| to_reader(p)) {
+    for reader in input.iter().map(|p| to_reader(p.as_ref())) {
         chain = Box::new(chain.chain(reader));
     }
     chain
 }
 
-fn to_reader(path: String) -> Box<io::Read> {
+fn to_reader<'a>(path: &'a str) -> Box<io::Read> {
     if path == "-" {
         Box::new(io::stdin())
     } else {
